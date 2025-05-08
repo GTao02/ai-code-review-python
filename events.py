@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Dict, Optional
 from pydantic import BaseModel
 
+
 class GitPlatform(Enum):
     """Git平台枚举
     
@@ -10,6 +11,7 @@ class GitPlatform(Enum):
     """
     GITHUB = "github"
     GITEE = "gitee"
+
 
 class WebhookEvent(BaseModel):
     """Webhook事件模型
@@ -25,11 +27,10 @@ class WebhookEvent(BaseModel):
     """
     platform: GitPlatform
     event_type: str
-    repository: Dict[str, str]
-    sender: Dict[str, str]
-    payload: Dict
+    payload: str
 
-def process_github_webhook(payload: Dict) -> Optional[WebhookEvent]:
+
+def process_github_webhook(payload: str) -> Optional[WebhookEvent]:
     """处理GitHub webhook事件
     
     Args:
@@ -40,11 +41,12 @@ def process_github_webhook(payload: Dict) -> Optional[WebhookEvent]:
     """
     if not payload:
         return None
-        
+
     return WebhookEvent(
         platform=GitPlatform.GITHUB,
         payload=payload
     )
+
 
 def handle_webhook_event(event: WebhookEvent) -> None:
     """处理webhook事件

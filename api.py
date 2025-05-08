@@ -157,21 +157,20 @@ async def update_repository(repo: RepositoryReq) -> Dict[str, str]:
     response_description="webhook处理结果"
 )
 async def github_webhook(
-    request: Request,
+    payload: str,
 ) -> Dict[str, str]:
     """处理GitHub webhook请求
     
     Args:
-        request: FastAPI请求对象
+        payload: webhook回调的消息
         
     Returns:
         Dict[str, str]: 处理结果
         
     Raises:
-        HTTPException: 当请求验证失败或处理出错时抛出相应的错误
+        HTTPException: 当请求验证失败或处理出错时抛出相应的错误:
     """
     try:
-        payload = await request.json()
         event = process_github_webhook(payload)
         print(event)
         if event:

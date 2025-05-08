@@ -48,7 +48,7 @@ def process_github_webhook(payload: Dict[str, any]) -> Optional[WebhookEvent]:
 
     # 获取仓库链接
     full_name = payload.get("repository").get("full_name")
-    repo_url = f"{GitPlatform.GITHUB}{os.sep}{full_name}"
+    repo_url = f"{GitPlatform.GITHUB.value}{'/'}{full_name}"
     print(repo_url)
 
     return WebhookEvent(

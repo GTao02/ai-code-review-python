@@ -1,3 +1,4 @@
+import os
 import typing
 from enum import Enum
 from typing import Optional
@@ -10,11 +11,12 @@ class GitPlatform(Enum):
     
     支持的Git平台类型
     """
-    GITHUB = "github"
-    GITEE = "gitee"
+    GITHUB = "github.com"
+    GITEE = "gitee.com"
 
 
 from typing import Dict
+
 
 class WebhookEvent(BaseModel):
     """Webhook事件模型
@@ -29,7 +31,6 @@ class WebhookEvent(BaseModel):
     payload: dict[str, typing.Any]
 
 
-
 def process_github_webhook(payload: Dict[str, any]) -> Optional[WebhookEvent]:
     """处理GitHub webhook事件
     
@@ -42,8 +43,16 @@ def process_github_webhook(payload: Dict[str, any]) -> Optional[WebhookEvent]:
     if not payload:
         return None
 
+    # 获取仓库链接
+    full_name = payload.get("repository").get("full_name")
+    repo_url = f"{GitPlatform.GITHUB}{os.sep}{full_name}"
+    print(repo_url)
+
     return WebhookEvent(
         platform=GitPlatform.GITHUB,
+        repo_url=repo_url,
+        before=payload.get("before"),
+        after=payload.get("after"),
         payload=payload
     )
 
@@ -60,4 +69,6 @@ def handle_webhook_event(event: WebhookEvent) -> None:
         event: 标准化的webhook事件数据
     """
     # TODO: 实现具体的事件处理逻辑
-    print(event)
+    print(event.repo_url)
+    print(event.before)
+    print(event.after)

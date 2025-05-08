@@ -149,6 +149,9 @@ async def update_repository(repo: RepositoryReq) -> Dict[str, str]:
         raise HTTPException(status_code=500, detail=f"仓库更新失败: {str(e)}")
 
 
+class WebhookReq(BaseModel):
+    payload: str
+
 @app.post(
     "/webhook/github",
     tags=["Webhook"],
@@ -157,12 +160,12 @@ async def update_repository(repo: RepositoryReq) -> Dict[str, str]:
     response_description="webhook处理结果"
 )
 async def github_webhook(
-    payload: str,
+    request: WebhookReq,
 ) -> Dict[str, str]:
     """处理GitHub webhook请求
     
     Args:
-        payload: webhook回调的消息
+        request: webhook回调的消息
         
     Returns:
         Dict[str, str]: 处理结果
@@ -171,7 +174,7 @@ async def github_webhook(
         HTTPException: 当请求验证失败或处理出错时抛出相应的错误:
     """
     try:
-        event = process_github_webhook(payload)
+        event = process_github_webhook(request.payload)
         print(event)
         if event:
             handle_webhook_event(event)

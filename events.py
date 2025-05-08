@@ -1,6 +1,7 @@
 import json
 from enum import Enum
-from typing import Dict, Optional
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -15,19 +16,15 @@ class GitPlatform(Enum):
 
 class WebhookEvent(BaseModel):
     """Webhook事件模型
-    
+
     统一的Webhook事件数据结构
-    
+
     Attributes:
         platform: Git平台类型
-        event_type: 事件类型（如push, pull_request等）
-        repository: 仓库信息
-        sender: 事件触发者信息
         payload: 原始事件数据
     """
     platform: GitPlatform
-    event_type: str
-    payload: Dict
+    payload: str
 
 
 def process_github_webhook(payload: str) -> Optional[WebhookEvent]:
@@ -39,12 +36,13 @@ def process_github_webhook(payload: str) -> Optional[WebhookEvent]:
     Returns:
         WebhookEvent: 标准化的事件数据
     """
+    print(payload)
     if not payload:
         return None
 
     return WebhookEvent(
         platform=GitPlatform.GITHUB,
-        payload=payload
+        payload=str(payload)
     )
 
 

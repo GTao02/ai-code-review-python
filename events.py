@@ -1,4 +1,3 @@
-import json
 import typing
 from enum import Enum
 from typing import Optional
@@ -27,7 +26,7 @@ class WebhookEvent(BaseModel):
         payload: 原始事件数据（JSON对象）
     """
     platform: GitPlatform
-    payload: Dict[str, any]
+    payload: dict[str, typing.Any]
 
 
 

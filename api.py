@@ -175,7 +175,6 @@ async def github_webhook(
     """
     try:
         event = process_github_webhook(request.payload)
-        print(event)
         if event:
             handle_webhook_event(event)
             return {"message": "webhook事件处理成功", "status": "success"}

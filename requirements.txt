@@ -1,0 +1,6 @@
+# Project dependencies
+
+gitpython==3.1.43  # GitPython 版本
+fastapi==0.109.2  # FastAPI 框架
+uvicorn==0.27.1  # ASGI 服务器
+pydantic==2.6.1  # 数据验证

@@ -27,7 +27,7 @@ class WebhookEvent(BaseModel):
     """
     platform: GitPlatform
     event_type: str
-    payload: str
+    payload: Dict
 
 
 def process_github_webhook(payload: str) -> Optional[WebhookEvent]:

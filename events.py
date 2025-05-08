@@ -1,4 +1,5 @@
 import json
+import typing
 from enum import Enum
 from typing import Optional
 
@@ -14,6 +15,8 @@ class GitPlatform(Enum):
     GITEE = "gitee"
 
 
+from typing import Dict
+
 class WebhookEvent(BaseModel):
     """Webhook事件模型
 
@@ -21,13 +24,14 @@ class WebhookEvent(BaseModel):
 
     Attributes:
         platform: Git平台类型
-        payload: 原始事件数据
+        payload: 原始事件数据（JSON对象）
     """
     platform: GitPlatform
-    payload: str
+    payload: Dict[str, any]
 
 
-def process_github_webhook(payload: str) -> Optional[WebhookEvent]:
+
+def process_github_webhook(payload: Dict[str, any]) -> Optional[WebhookEvent]:
     """处理GitHub webhook事件
     
     Args:
@@ -36,13 +40,12 @@ def process_github_webhook(payload: str) -> Optional[WebhookEvent]:
     Returns:
         WebhookEvent: 标准化的事件数据
     """
-    print(payload)
     if not payload:
         return None
 
     return WebhookEvent(
         platform=GitPlatform.GITHUB,
-        payload=str(payload)
+        payload=payload
     )
 
 

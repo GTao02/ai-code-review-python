@@ -5,6 +5,8 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+from utils import get_git_changes
+
 
 class GitPlatform(Enum):
     """Git平台枚举
@@ -49,7 +51,7 @@ def process_github_webhook(payload: Dict[str, any]) -> Optional[WebhookEvent]:
     # 获取仓库链接
     full_name = payload.get("repository").get("full_name")
     repo_url = f"{GitPlatform.GITHUB.value}{'/'}{full_name}"
-    print(repo_url)
+    # print(repo_url)
 
     return WebhookEvent(
         platform=GitPlatform.GITHUB,
@@ -75,3 +77,5 @@ def handle_webhook_event(event: WebhookEvent) -> None:
     print(event.repo_url)
     print(event.before)
     print(event.after)
+    changes = get_git_changes(event.repo_url, event.before, event.after)
+    print(changes)

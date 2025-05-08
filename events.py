@@ -28,6 +28,9 @@ class WebhookEvent(BaseModel):
         payload: 原始事件数据（JSON对象）
     """
     platform: GitPlatform
+    repo_url: str
+    before: str
+    after: str
     payload: dict[str, typing.Any]
 
 
@@ -47,7 +50,6 @@ def process_github_webhook(payload: Dict[str, any]) -> Optional[WebhookEvent]:
     full_name = payload.get("repository").get("full_name")
     repo_url = f"{GitPlatform.GITHUB}{os.sep}{full_name}"
     print(repo_url)
-
 
     return WebhookEvent(
         platform=GitPlatform.GITHUB,

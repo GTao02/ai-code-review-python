@@ -160,7 +160,7 @@ class WebhookReq(BaseModel):
     response_description="webhook处理结果"
 )
 async def github_webhook(
-    request: WebhookReq,
+    request: Request,
 ) -> Dict[str, str]:
     """处理GitHub webhook请求
     
@@ -174,7 +174,8 @@ async def github_webhook(
         HTTPException: 当请求验证失败或处理出错时抛出相应的错误:
     """
     try:
-        event = process_github_webhook(request.payload)
+        payload = await request.json()
+        event = process_github_webhook(payload)
         if event:
             handle_webhook_event(event)
             return {"message": "webhook事件处理成功", "status": "success"}
